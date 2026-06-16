@@ -12,6 +12,7 @@ const corsOptions = {
     'http://doc-it.canopycannes.com',
     'http://doc-it.canopycannes.com:80',
     'http://0.0.0.0:80',
+    'https://doc.canopycannes-virtualtour.com',
     process.env.FRONTEND_URL || 'http://localhost'
   ],
   credentials: true,
