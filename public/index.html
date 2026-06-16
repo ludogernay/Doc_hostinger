@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: sans-serif;
+      background: #f3f4f6;
+      min-height: 100vh;
+      padding: 1.5rem;
+      color: #111;
+    }
+
+    header {
+      max-width: 64rem;
+      margin: 0 auto 1rem;
+      background: #fff;
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #111;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card {
+      max-width: 64rem;
+      margin: 0 auto 1.5rem;
+      background: #fff;
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .list-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .search-input {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .doc-btn {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.65rem 1rem;
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      line-height: 1.3;
+    }
+
+    .doc-btn:hover { background: #2563eb; }
+    .doc-btn:active { transform: scale(0.98); }
+    .doc-btn.active { background: #15803d; }
+
+    .no-results {
+      color: #6b7280;
+      text-align: center;
+      grid-column: 1/-1;
+      padding: 1rem 0;
+    }
+
+    .doc-content {
+      max-width: 64rem;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 0.75rem;
+      padding: 2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+
+    .doc-content h2.doc-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2563eb;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #e5e7eb;
+      margin-bottom: 1.25rem;
+    }
+
+    .prose { line-height: 1.7; color: #1f2937; }
+    .prose h1 { font-size: 1.5rem; font-weight: 700; margin: 1.25rem 0 0.5rem; }
+    .prose h2 { font-size: 1.25rem; font-weight: 700; margin: 1.1rem 0 0.4rem; }
+    .prose h3 { font-size: 1.05rem; font-weight: 600; margin: 1rem 0 0.3rem; }
+    .prose p { margin-bottom: 0.75rem; }
+    .prose ul, .prose ol { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+    .prose li { margin-bottom: 0.25rem; }
+    .prose a { color: #2563eb; text-decoration: underline; }
+    .prose code { background: #f1f5f9; border-radius: 4px; padding: 1px 5px; font-size: 0.88em; font-family: monospace; }
+    .prose pre { background: #1e293b; color: #e2e8f0; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin-bottom: 0.75rem; }
+    .prose pre code { background: none; color: inherit; padding: 0; }
+    .prose blockquote { border-left: 4px solid #3b82f6; padding-left: 1rem; color: #4b5563; margin: 0.75rem 0; }
+    .prose table { border-collapse: collapse; width: 100%; margin-bottom: 0.75rem; }
+    .prose th, .prose td { border: 1px solid #e5e7eb; padding: 0.5rem 0.75rem; font-size: 0.9rem; }
+    .prose th { background: #f9fafb; font-weight: 600; }
+    .prose strong { color: #2563eb; font-weight: 600; }
+    .prose img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+
+    #content-section { display: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📖 Documentation</h1>
+  </header>
+
+  <div class="card">
+    <div class="list-header">
+      <h2>📁 Liste des documents :</h2>
+      <input class="search-input" type="text" id="search" placeholder="🔍 Rechercher..." />
+    </div>
+    <div class="grid" id="doc-grid">
+      <p class="no-results">Chargement...</p>
+    </div>
+  </div>
+
+  <div class="doc-content" id="content-section">
+    <h2 class="doc-title" id="doc-title">📄 </h2>
+    <div class="prose" id="doc-body"></div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:5000';
+
+    let allFiles = [];
+    let activeFile = null;
+
+    async function loadFiles() {
+      try {
+        const res = await fetch(`${API_URL}/api/documentation/files`);
+        const data = await res.json();
+        allFiles = data.filter(f => f !== 'img');
+        renderGrid(allFiles);
+      } catch (e) {
+        document.getElementById('doc-grid').innerHTML = '<p class="no-results">Erreur lors du chargement des documents.</p>';
+      }
+    }
+
+    function renderGrid(files) {
+      const grid = document.getElementById('doc-grid');
+      if (!files.length) {
+        grid.innerHTML = '<p class="no-results">Aucun document trouvé.</p>';
+        return;
+      }
+      grid.innerHTML = files.map(f => `
+        <button class="doc-btn ${f === activeFile ? 'active' : ''}" onclick="loadDoc('${f}')">${f}</button>
+      `).join('');
+    }
+
+    async function loadDoc(filename) {
+      activeFile = filename;
+      renderGrid(document.getElementById('search').value
+        ? allFiles.filter(f => f.toLowerCase().includes(document.getElementById('search').value.toLowerCase()))
+        : allFiles);
+
+      try {
+        const res = await fetch(`${API_URL}/api/documentation/${encodeURIComponent(filename)}`);
+        const text = await res.text();
+
+        document.getElementById('doc-title').innerHTML = `📄 ${filename}`;
+        document.getElementById('doc-body').innerHTML = marked.parse(text);
+        const section = document.getElementById('content-section');
+        section.style.display = 'block';
+        setTimeout(() => {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.scrollBy({ top: -20, behavior: 'smooth' });
+        }, 100);
+      } catch (e) {
+        document.getElementById('doc-body').innerHTML = '<p>Erreur lors du chargement du document.</p>';
+      }
+    }
+
+    document.getElementById('search').addEventListener('input', e => {
+      const val = e.target.value.toLowerCase();
+      renderGrid(val ? allFiles.filter(f => f.toLowerCase().includes(val)) : allFiles);
+    });
+
+    loadFiles();
+  </script>
+</body>
+</html>
