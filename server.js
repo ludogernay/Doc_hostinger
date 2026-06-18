@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const basicAuth = require('express-basic-auth');
 
 const app = express();
 
@@ -22,6 +23,18 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// ✅ Route /health sans protection (pour Render)
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// 🔒 Basic Auth sur toutes les autres routes
+app.use(basicAuth({
+  users: { [process.env.ADMIN_USER]: process.env.ADMIN_PASSWORD },
+  challenge: true
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
@@ -48,10 +61,6 @@ app.get('/api/documentation/:filename', (req, res) => {
     }
     res.send(data);
   });
-});
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 const PORT = process.env.PORT || 5000;
