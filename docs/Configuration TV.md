@@ -6,7 +6,7 @@ Ce document décrit les étapes pour configurer et installer les télévisions d
 ---
 
 ## 📌 Prérequis
-- **TV connectée au VLAN 60**
+- **TV connectée aux switch Guest Tek**
 - **Télécommande** de la télévision
 - **Code d'accès** *(à demander au préalable)*
 
