@@ -9,7 +9,7 @@ Décrire les étapes pour identifier l'origine d'une panne wifi à l'hôtel et l
 
 | Infrastructure | Périmètre |
 |---|---|
-| **MonacoDigital** | VMs, serveurs de données, internet via RJ45, musique d'ambiance |
+| **Interne** | VMs, serveurs de données, internet via RJ45, musique d'ambiance |
 | **Guest Tek** | Wifi hôtel (clients & chambres), connexion internet des TV (via bornes wifi) |
 
 > 📍 Tous les équipements sont regroupés dans **une salle technique centralisée**.
