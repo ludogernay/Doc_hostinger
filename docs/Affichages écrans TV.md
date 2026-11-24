@@ -1,6 +1,6 @@
 # 🖥️ Gestion des affichages sur écrans (Meeting Rooms & Chambres)
 
-## 📝 Objectif
+## 📝 Objectifs
 Décrire les étapes pour gérer l’affichage dynamique sur les **écrans des salles de réunion**, **ascenseurs**, **réception**, et **TV en chambre** via le **Cloud Portal**.
 
 ---
