@@ -357,8 +357,16 @@
         return;
       }
       grid.innerHTML = files.map(f => `
-        <button class="doc-btn ${f === activeFile ? 'active' : ''}" onclick="loadDoc('${f}')">${f}</button>
+        <button class="doc-btn ${f === activeFile ? 'active' : ''}" data-file="${escapeHtml(f)}">${escapeHtml(f)}</button>
       `).join('');
+      grid.querySelectorAll('.doc-btn').forEach(btn => {
+        btn.addEventListener('click', () => loadDoc(btn.dataset.file));
+      });
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     async function loadDoc(filename) {
